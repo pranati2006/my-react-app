@@ -1,24 +1,21 @@
 
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import MainScreen from './MainScreen.js';
+import AddTasks from './AddTasks.js';
+import DisplayTasks from './DisplayTasks.js';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainScreen />} />
+        <Route path="/addtask" element={<AddTasks />} />
+        <Route path="/displaytask" element={<DisplayTasks />} />
+        <Route path="*" element={<div style={{ padding: 16 }}>Not found</div>} />
+      </Routes>
+    </Router>
   );
-}
+
+};
 
 export default App;
