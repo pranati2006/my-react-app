@@ -1,38 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
-//import AddTasks from "./AddTasks";
+import AddTasks from "./AddTasks";
+import { Tasks } from "./dataset";
 import DisplayTasks from "./DisplayTasks";
 
 function MainScreen() {
     const navigate = useNavigate();
 
-    const [tasks] = useState([
-        {
-            id: 1,
-            title: "Task A",
-            assignedDate: "2025-09-01",
-            finishTime: "15:00",
-            finish: false
-        },
-        {
-            id: 2,
-            title: "Task B",
-            assignedDate: "2025-09-02",
-            finishTime: "14:00",
-            finish: false
-        },
-        {
-            id: 3,
-            title: "Task C",
-            assignedDate: "2025-09-01",
-            finishTime: "18:00",
-            finish: false
-        },
-    ]);
-    const uniqueDates = [...new Set(tasks.map((t) => t.assignedDate))];
+    const [uniqueDates, setUniqueDates] = useState([]);
+
+    useEffect(() => {
+        setUniqueDates([...new Set(Tasks.map(t => t.assignedDate))]);
+    }, []);
 
     const handleDateClick = (date) => {
         alert("Date clicked:" + date);
+        navigate(`/displaytask`);
     };
 
     const addATask = () => {
