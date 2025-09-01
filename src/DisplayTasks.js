@@ -1,46 +1,43 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Navigate } from "react-router-dom";
+import { Tasks } from "./dataset";
 
-function DisplayTasks() {
+export default function DisplayTasks() {
+    const { date } = useParams();                 // e.g. "2025-09-01" or undefined
+
+
     const navigate = useNavigate();
+    const [filter, setFilter] = useState("all");   // all | finished | unfinished
+    const [, force] = useState(0);                 // bump to re-render after mutations
 
-    const [tasks, setTasks] = useState([
-        { id: 1, title: "Task A", assignedDate: "2025-09-01", finishTime: "15:00", finish: false },
-        { id: 2, title: "Task B", assignedDate: "2025-09-02", finishTime: "14:00", finish: true },
-        { id: 3, title: "Task C", assignedDate: "2025-09-01", finishTime: "18:00", finish: false },
-    ]);
+    // Filter: first by date param (exact match—no URI encoding needed), then by status
+    if (!date) return <Navigate to="/" replace />; // no date → go home
 
-    const [filter, setFilter] = useState("all"); // all | finished | unfinished
+    const filteredTasks = Tasks
+        .filter(t => t.assignedDate === date)
+        .filter(t => (filter === "finished" ? t.finish : filter === "unfinished" ? !t.finish : true));
 
     const handleFinish = (id) => {
-        setTasks((prev) =>
-            prev.map((task) =>
-                task.id === id ? { ...task, finish: !task.finish } : task
-            )
-        );
+        const i = Tasks.findIndex((t) => t.id === id);
+        if (i !== -1) {
+            Tasks[i].finish = !Tasks[i].finish;
+            force((x) => x + 1);
+        }
     };
 
     const handleDelete = (id) => {
-        setTasks((prev) => prev.filter((task) => task.id !== id));
+        const i = Tasks.findIndex((t) => t.id === id);
+        if (i !== -1) {
+            Tasks.splice(i, 1);
+            force((x) => x + 1);
+        }
     };
-
-    const goback = () => {
-        navigate(`/`);
-    };
-
-    // Filter tasks based on selected option
-    const filteredTasks = tasks.filter((task) => {
-        if (filter === "finished") return task.finish;
-        if (filter === "unfinished") return !task.finish;
-        return true; // "all"
-    });
 
     return (
         <div className="tasks-container">
-            <button onClick={goback}>back</button>
-            <h2>Tasks</h2>
+            <button onClick={() => navigate("/")}>back</button>
+            <h2>Tasks on {date}</h2>
 
-            {/* Filter selector */}
             <div className="filter-container">
                 <label htmlFor="filter">Show: </label>
                 <select
@@ -55,31 +52,24 @@ function DisplayTasks() {
             </div>
 
             <div className="task-list">
-                {filteredTasks.length > 0 ? (
+                {filteredTasks.length ? (
                     filteredTasks.map((task) => (
                         <div key={task.id} className="task-item">
                             <div
-                                className={
-                                    task.finish ? "task-name-finish" : "task-name-notfinish"
-                                }
+                                className={task.finish ? "task-name-finish" : "task-name-notfinish"}
                                 onClick={() => handleFinish(task.id)}
                             >
-                                {task.title}
+                                {task.title} — {task.finishTime} — {task.finish ? "Finished" : "Not finished"}
                             </div>
-                            <button
-                                className="task-button"
-                                onClick={() => handleDelete(task.id)}
-                            >
+                            <button className="task-button" onClick={() => handleDelete(task.id)}>
                                 delete
                             </button>
                         </div>
                     ))
                 ) : (
-                    <p>No tasks to show</p>
+                    <p>No tasks for {date}.</p>
                 )}
             </div>
         </div>
     );
 }
-
-export default DisplayTasks;

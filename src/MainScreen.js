@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import AddTasks from "./AddTasks";
 import { Tasks } from "./dataset";
 import DisplayTasks from "./DisplayTasks";
 
 function MainScreen() {
     const navigate = useNavigate();
+
 
     const [uniqueDates, setUniqueDates] = useState([]);
 
@@ -15,7 +16,7 @@ function MainScreen() {
 
     const handleDateClick = (date) => {
         alert("Date clicked:" + date);
-        navigate(`/displaytask`);
+        navigate(`/displaytask/${date}`);
     };
 
     const addATask = () => {
