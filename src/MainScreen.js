@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tasks } from "./dataset";
+import ThemeToggle from "./ThemeToggle";
 
 export default function MainScreen() {
     const navigate = useNavigate();
@@ -23,6 +24,7 @@ export default function MainScreen() {
                 <button className="btn btn-primary" onClick={() => navigate("/addtask")}>
                     + Add task
                 </button>
+                <ThemeToggle />
             </div>
 
             <h2 className="page-title">Task Dates</h2>
@@ -55,6 +57,7 @@ export default function MainScreen() {
                     <li className="empty">No dates yet. Add your first task.</li>
                 )}
             </ul>
+
         </div>
     );
 }

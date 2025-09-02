@@ -478,6 +478,27 @@ select.invalid {
 }
 
 /* =========================================
+   theme toggle
+   ========================================= */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding-inline: 12px;
+}
+
+.theme-toggle-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.theme-toggle-text {
+  font-weight: 600;
+}
+
+
+
+/* =========================================
    RESPONSIVE (mobile-first → up)
    Breakpoints: 480, 640, 768, 1024, 1280, 1536
    ========================================= */
