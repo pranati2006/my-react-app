@@ -106,7 +106,7 @@ export default function AddTasks() {
                         onFocus={onFieldFocus}
                         required
                         aria-invalid={invalid.title ? "true" : "false"}
-                        placeholder="e.g. Write report"
+                        placeholder="Task title…"
                     />
                 </div>
 
