@@ -1,14 +1,18 @@
 import React, { useState } from "react";
-import { useParams, useNavigate, Navigate } from "react-router-dom";
+import { useParams, useNavigate, Navigate, useLocation } from "react-router-dom";
 import { Tasks } from "./dataset";
 
 export default function AddTasks() {
     const navigate = useNavigate();
     const { id } = useParams();
+    const location = useLocation();
 
     const isEdit = !!id;
     const existing = isEdit ? Tasks.find((t) => t.id === Number(id)) : null;
 
+    // read ?date=YYYY-MM-DD for create flow
+    const search = new URLSearchParams(location.search);
+    const presetDate = !isEdit ? (search.get("date") || "") : ""; // ignore if editing
 
 
     const [form, setForm] = useState(() =>
@@ -18,7 +22,7 @@ export default function AddTasks() {
                 assignedDate: existing.assignedDate,
                 description: existing.description ?? "",
             }
-            : { title: "", assignedDate: "", description: "" }
+            : { title: "", assignedDate: presetDate, description: "" }
     );
 
 
@@ -85,9 +89,6 @@ export default function AddTasks() {
 
     return (
         <div className="addtask-container">
-            <button type="button" className="btn btn-secondary" onClick={() => navigate("/")}>
-                ← back
-            </button>
 
             <h2 className="page-title">{isEdit ? "Modify Task" : "Add Task"}</h2>
 

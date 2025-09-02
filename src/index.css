@@ -66,7 +66,7 @@ body {
   color: var(--text);
 }
 
-/* Shared containers */
+/* Shared page containers */
 .addtask-container,
 .mainscreen-container,
 .tasks-container {
@@ -76,7 +76,6 @@ body {
   padding: 16px;
 }
 
-/* AddTask panel box */
 .addtask-container {
   background: var(--panel);
   border: 1px solid var(--border);
@@ -90,10 +89,10 @@ body {
   font-size: 1.35rem;
 }
 
-/* Toolbar above lists */
+/* Toolbar */
 .toolbar {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
   gap: 10px;
   margin-bottom: 12px;
 }
@@ -141,7 +140,7 @@ select:focus {
   min-height: 80px;
 }
 
-/* invalid state (toggle className="invalid") */
+/* invalid state (toggle className="invalid" in JS) */
 .input.invalid,
 .textarea.invalid,
 select.invalid {
@@ -239,7 +238,7 @@ select.invalid {
   background: rgba(239, 68, 68, .08);
 }
 
-/* For older code using .task-button */
+/* Legacy button class support */
 .task-button {
   border: 1px solid var(--border);
   background: #ffffff;
@@ -258,9 +257,8 @@ select.invalid {
 }
 
 /* =========================================
-   LISTS
+   MAINSCREEN — Contact-style date list
    ========================================= */
-/* "Contact list" style for dates on MainScreen */
 .contact-list {
   list-style: none;
   padding: 0;
@@ -311,7 +309,148 @@ select.invalid {
   padding: 8px;
 }
 
-/* Tasks & dates (legacy classes used by DisplayTasks) */
+/* =========================================
+   DISPLAYTASKS — Task cards with corner actions & bottom bar
+   ========================================= */
+.task-card {
+  position: relative;
+
+  padding: 12px 14px;
+  padding-bottom: 56px;
+  /* space for bottom finish bar */
+}
+
+.task-card .task-main {
+  padding-right: 48px;
+  /* room for the icon buttons */
+}
+
+.task-main {
+  display: grid;
+  gap: 6px;
+  min-height: 70px;
+  width: 100%;
+}
+
+.task-title-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.task-desc {
+  color: var(--muted);
+  font-size: .95rem;
+}
+
+/* small red "late" line under title */
+.task-late {
+  color: var(--danger);
+  font-size: 0.88rem;
+  margin-top: 2px;
+}
+
+/* corner icon buttons */
+.icon-btn {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--text);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: filter .15s ease, transform .03s ease, background .15s ease, border-color .15s ease;
+}
+
+.icon-btn {
+  z-index: 2;
+}
+
+.finish-bar {
+  z-index: 1;
+}
+
+.theme-dark .icon-btn {
+  background: #0f0f0f;
+}
+
+.icon-btn:hover {
+  filter: brightness(.98);
+}
+
+.icon-btn:active {
+  transform: translateY(1px);
+}
+
+/* positions for edit/delete */
+.icon-edit {
+  top: 8px;
+  right: 8px;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.icon-trash {
+  bottom: 56px;
+  right: 8px;
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+/* full-width finish toggle at bottom of card */
+.finish-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 44px;
+  border: 0;
+  border-top: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 600;
+  transition: background .15s ease, filter .15s ease;
+}
+
+.finish-bar:hover {
+  filter: brightness(.98);
+}
+
+.finish-bar.is-finished {
+  background: rgba(22, 163, 74, .14);
+  /* green tint */
+  border-top-color: rgba(22, 163, 74, .35);
+}
+
+/* =========================================
+   STATUS TEXT (shared)
+   ========================================= */
+.task-name-finish {
+  color: var(--ok);
+  font-weight: 600;
+}
+
+.task-name-notfinish {
+  color: var(--text);
+}
+
+/* Actions row utility */
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* =========================================
+   LEGACY DATE/TASK GRID (optional)
+   ========================================= */
 .date-list,
 .task-list {
   display: grid;
@@ -338,21 +477,6 @@ select.invalid {
   background: var(--panel-2);
 }
 
-.task-name-finish {
-  color: var(--ok);
-  font-weight: 600;
-}
-
-.task-name-notfinish {
-  color: var(--text);
-}
-
-.actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 4px;
-}
-
 /* =========================================
    RESPONSIVE (mobile-first → up)
    Breakpoints: 480, 640, 768, 1024, 1280, 1536
@@ -363,11 +487,30 @@ select.invalid {
   .mainscreen-container,
   .tasks-container {
     padding: 18px;
+
   }
+
+  .icon-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .task-card {
+    min-height: 110px;
+    padding-bottom: 50px;
+  }
+
+  .icon-trash {
+    bottom: 50px;
+  }
+
+  /* keep 
 }
 
 @media (min-width: 640px) {
 
+  /* keep contact-list as single column to look like a contact app */
+  /* legacy grids can split into columns if you use them */
   .date-list,
   .task-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -406,5 +549,23 @@ select.invalid {
   .date-list,
   .task-list {
     grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+/* Tiny screens tweaks */
+@media (max-width: 420px) {
+
+  .icon-edit,
+  .icon-trash {
+    width: 32px;
+    height: 32px;
+  }
+
+  .task-card {
+    padding-bottom: 54px;
+  }
+
+  .icon-trash {
+    bottom: 54px;
   }
 }

@@ -1,21 +1,31 @@
+// src/DisplayTasks.js
 import React, { useState } from "react";
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { Tasks } from "./dataset";
 
 export default function DisplayTasks() {
-    const { date } = useParams();                 // e.g. "2025-09-01" or undefined
-
-
     const navigate = useNavigate();
-    const [filter, setFilter] = useState("all");   // all | finished | unfinished
-    const [, force] = useState(0);                 // bump to re-render after mutations
+    const { date } = useParams();
 
-    // Filter: first by date param (exact match—no URI encoding needed), then by status
-    if (!date) return <Navigate to="/" replace />; // no date → go home
+    // hooks first (rules of hooks)
+    const [filter, setFilter] = useState("all"); // all | unfinished | finished
+    const [, force] = useState(0);               // bump to re-render after mutations
 
-    const filteredTasks = Tasks
-        .filter(t => t.assignedDate === date)
-        .filter(t => (filter === "finished" ? t.finish : filter === "unfinished" ? !t.finish : true));
+    // no date → go home
+    if (!date) return <Navigate to="/" replace />;
+
+    // Filter by date, then by status
+    const byDate = (t) => t.assignedDate === date;
+    const byStatus = (t) =>
+        filter === "finished" ? t.finish :
+            filter === "unfinished" ? !t.finish : true;
+
+    // Visible tasks (sorted by id for stable order)
+    const visible = Tasks
+        .filter(byDate)
+        .filter(byStatus)
+        .slice()
+        .sort((a, b) => a.id - b.id);
 
     const handleFinish = (id) => {
         const i = Tasks.findIndex((t) => t.id === id);
@@ -35,13 +45,20 @@ export default function DisplayTasks() {
 
     return (
         <div className="tasks-container">
-            <button onClick={() => navigate("/")}>back</button>
-            <h2>Tasks on {date}</h2>
+            {/* top toolbar */}
+            <div className="toolbar">
+                <button className="btn btn-secondary" onClick={() => navigate("/")}>← Back</button>
+                <div style={{ flex: 1 }} />
+                <button className="btn btn-primary" onClick={() => navigate(`/addtask?date=${date}`)}>+ Add task</button>
+            </div>
 
-            <div className="filter-container">
-                <label htmlFor="filter">Show: </label>
+            <h2 className="page-title">Tasks on {date}</h2>
+
+            {/* filter row */}
+            <div className="toolbar" style={{ justifyContent: "flex-start", gap: 12 }}>
+                <label className="label" htmlFor="statusFilter">Show:</label>
                 <select
-                    id="filter"
+                    id="statusFilter"
                     value={filter}
                     onChange={(e) => setFilter(e.target.value)}
                 >
@@ -51,32 +68,60 @@ export default function DisplayTasks() {
                 </select>
             </div>
 
-            <div className="task-list">
-                {filteredTasks.length ? (
-                    filteredTasks.map((task) => (
-                        <div key={task.id} className="task-item">
-                            <div
-                                className={task.finish ? "task-name-finish" : "task-name-notfinish"}
-                            >
-                                {task.title} — {task.description} — {task.finish ? "Finished" : "Not finished"}
+            {/* contact-style list */}
+            <ul className="contact-list">
+                {visible.length ? (
+                    visible.map((task) => (
+                        <li key={task.id} className="contact-row task-card">
+                            {/* main block (title + description) */}
+                            <div className="task-main">
+                                <div className="task-title-line">
+                                    <span className={task.finish ? "task-name-finish" : "task-name-notfinish"}>
+                                        {task.title}
+                                    </span>
+                                </div>
+                                {task.description && (
+                                    <div className="task-desc">{task.description}</div>
+                                )}
                             </div>
-                            <button className="task-button" onClick={() => navigate(`/addtask/${task.id}`)}>
-                                modify
+
+                            {/* top-right: modify (pencil) */}
+                            <button
+                                className="icon-btn icon-edit"
+                                onClick={() => navigate(`/addtask/${task.id}`)}
+                                aria-label="Modify task"
+                                title="Modify"
+                            >
+                                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor" />
+                                </svg>
                             </button>
 
-                            <button className="task-button" onClick={() => handleFinish(task.id)}>
-                                {task.finish ? "unfinish" : "finish"}
+                            {/* bottom-right: delete (dustbin) */}
+                            <button
+                                className="icon-btn icon-trash"
+                                onClick={() => handleDelete(task.id)}
+                                aria-label="Delete task"
+                                title="Delete"
+                            >
+                                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                                    <path d="M9 3h6v2h5v2H4V5h5V3zm1 6h2v8h-2V9zm4 0h2v8h-2V9z" fill="currentColor" />
+                                </svg>
                             </button>
 
-                            <button className="task-button" onClick={() => handleDelete(task.id)}>
-                                delete
+                            {/* bottom full-width: finish toggle */}
+                            <button
+                                className={`finish-bar ${task.finish ? "is-finished" : ""}`}
+                                onClick={() => handleFinish(task.id)}
+                            >
+                                {task.finish ? "Mark Unfinished" : "Mark Finished"}
                             </button>
-                        </div>
+                        </li>
                     ))
                 ) : (
-                    <p>No tasks for {date}.</p>
+                    <li className="empty">No tasks for {date}.</li>
                 )}
-            </div>
+            </ul>
         </div>
     );
 }
