@@ -1,12 +1,12 @@
 // src/DisplayTasks.js
 import React, { useState } from "react";
 import { useParams, useNavigate, Navigate } from "react-router-dom";
-import { Tasks } from "./dataset";
+import { loadTasks, saveTasks } from "./dataset";
 
 export default function DisplayTasks() {
     const navigate = useNavigate();
     const { date } = useParams();
-
+    const Tasks = loadTasks();
 
     const [filter, setFilter] = useState("all");
     const [, force] = useState(0);
@@ -33,6 +33,7 @@ export default function DisplayTasks() {
             Tasks[i].finish = !Tasks[i].finish;
             force((x) => x + 1);
         }
+        saveTasks(Tasks);
     };
 
     const handleDelete = (id) => {
@@ -41,6 +42,7 @@ export default function DisplayTasks() {
             Tasks.splice(i, 1);
             force((x) => x + 1);
         }
+        saveTasks(Tasks);
     };
 
     return (

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Tasks } from "./dataset";
+import { loadTasks, saveTasks } from "./dataset";
 import ThemeToggle from "./ThemeToggle";
 
 export default function MainScreen() {
     const navigate = useNavigate();
     const [, force] = useState(0);
 
+    const Tasks = loadTasks();
 
     const datesDesc = [...new Set(Tasks.map(t => t.assignedDate))]
         .sort((a, b) => b.localeCompare(a));
@@ -15,6 +16,7 @@ export default function MainScreen() {
         const keep = Tasks.filter(t => t.assignedDate !== date);
         Tasks.splice(0, Tasks.length, ...keep);
         force(x => x + 1);
+        saveTasks(Tasks);
     };
 
     return (

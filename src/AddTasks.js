@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useParams, useNavigate, Navigate, useLocation } from "react-router-dom";
-import { Tasks } from "./dataset";
+import { loadTasks, saveTasks } from "./dataset";
 
 export default function AddTasks() {
     const navigate = useNavigate();
     const { id } = useParams();
     const location = useLocation();
+    const Tasks = loadTasks();
 
     const isEdit = !!id;
     const existing = isEdit ? Tasks.find((t) => t.id === Number(id)) : null;
@@ -70,6 +71,7 @@ export default function AddTasks() {
                     description: safeDesc,
                 };
             }
+            saveTasks(Tasks);
             navigate(`/displaytask/${safeDate}`);
             return;
         }
@@ -82,6 +84,7 @@ export default function AddTasks() {
             description: safeDesc,
             finish: false,
         });
+        saveTasks(Tasks);
 
         navigate(`/displaytask/${safeDate}`);
     };
