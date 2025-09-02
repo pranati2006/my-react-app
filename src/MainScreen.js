@@ -5,15 +5,14 @@ import ThemeToggle from "./ThemeToggle";
 
 export default function MainScreen() {
     const navigate = useNavigate();
-    const [, force] = useState(0); // bump to re-render after deletes
+    const [, force] = useState(0);
 
-    // unique dates, newest → oldest
+
     const datesDesc = [...new Set(Tasks.map(t => t.assignedDate))]
         .sort((a, b) => b.localeCompare(a));
 
     const deleteByDate = (date) => {
         const keep = Tasks.filter(t => t.assignedDate !== date);
-        // mutate the shared array **in place** (don’t reassign)
         Tasks.splice(0, Tasks.length, ...keep);
         force(x => x + 1);
     };

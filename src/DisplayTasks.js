@@ -7,20 +7,20 @@ export default function DisplayTasks() {
     const navigate = useNavigate();
     const { date } = useParams();
 
-    // hooks first (rules of hooks)
-    const [filter, setFilter] = useState("all"); // all | unfinished | finished
-    const [, force] = useState(0);               // bump to re-render after mutations
 
-    // no date → go home
+    const [filter, setFilter] = useState("all");
+    const [, force] = useState(0);
+
+
     if (!date) return <Navigate to="/" replace />;
 
-    // Filter by date, then by status
+
     const byDate = (t) => t.assignedDate === date;
     const byStatus = (t) =>
         filter === "finished" ? t.finish :
             filter === "unfinished" ? !t.finish : true;
 
-    // Visible tasks (sorted by id for stable order)
+
     const visible = Tasks
         .filter(byDate)
         .filter(byStatus)
@@ -45,7 +45,7 @@ export default function DisplayTasks() {
 
     return (
         <div className="tasks-container">
-            {/* top toolbar */}
+
             <div className="toolbar">
                 <button className="btn btn-secondary" onClick={() => navigate("/")}>← Back</button>
                 <div style={{ flex: 1 }} />
@@ -54,7 +54,7 @@ export default function DisplayTasks() {
 
             <h2 className="page-title">Tasks on {date}</h2>
 
-            {/* filter row */}
+
             <div className="toolbar" style={{ justifyContent: "flex-start", gap: 12 }}>
                 <label className="label" htmlFor="statusFilter">Show:</label>
                 <select
@@ -68,12 +68,12 @@ export default function DisplayTasks() {
                 </select>
             </div>
 
-            {/* contact-style list */}
+
             <ul className="contact-list">
                 {visible.length ? (
                     visible.map((task) => (
                         <li key={task.id} className="contact-row task-card">
-                            {/* main block (title + description) */}
+
                             <div className="task-main">
                                 <div className="task-title-line">
                                     <span className={task.finish ? "task-name-finish" : "task-name-notfinish"}>
@@ -85,7 +85,7 @@ export default function DisplayTasks() {
                                 )}
                             </div>
 
-                            {/* top-right: modify (pencil) */}
+
                             <button
                                 className="icon-btn icon-edit"
                                 onClick={() => navigate(`/addtask/${task.id}`)}
@@ -97,7 +97,7 @@ export default function DisplayTasks() {
                                 </svg>
                             </button>
 
-                            {/* bottom-right: delete (dustbin) */}
+
                             <button
                                 className="icon-btn icon-trash"
                                 onClick={() => handleDelete(task.id)}
@@ -109,7 +109,7 @@ export default function DisplayTasks() {
                                 </svg>
                             </button>
 
-                            {/* bottom full-width: finish toggle */}
+
                             <button
                                 className={`finish-bar ${task.finish ? "is-finished" : ""}`}
                                 onClick={() => handleFinish(task.id)}

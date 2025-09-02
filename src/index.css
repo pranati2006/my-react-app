@@ -1,9 +1,3 @@
-/* =========================================
-   THEME
-   - Default: Light (white)
-   - Optional dark: add class "theme-dark" to <body> or a top wrapper
-   Secondary/accent color = blue
-   ========================================= */
 :root {
   --bg: #ffffff;
   --panel: #f7f7f8;
@@ -13,13 +7,10 @@
   --border: #e5e7eb;
 
   --accent: #2563eb;
-  /* blue */
   --accent-contrast: #ffffff;
 
   --ok: #16a34a;
-  /* green */
   --danger: #ef4444;
-  /* red */
 
   --radius: 12px;
   --shadow: 0 6px 18px rgba(0, 0, 0, .06);
@@ -46,9 +37,7 @@
   --shadow: 0 8px 24px rgba(0, 0, 0, .35);
 }
 
-/* =========================================
-   BASE
-   ========================================= */
+
 * {
   box-sizing: border-box;
 }
@@ -66,7 +55,7 @@ body {
   color: var(--text);
 }
 
-/* Shared page containers */
+
 .addtask-container,
 .mainscreen-container,
 .tasks-container {
@@ -89,7 +78,7 @@ body {
   font-size: 1.35rem;
 }
 
-/* Toolbar */
+
 .toolbar {
   display: flex;
   align-items: center;
@@ -97,9 +86,6 @@ body {
   margin-bottom: 12px;
 }
 
-/* =========================================
-   FORMS (AddTasks)
-   ========================================= */
 .form {
   display: grid;
   gap: var(--gap-lg);
@@ -140,7 +126,7 @@ select:focus {
   min-height: 80px;
 }
 
-/* invalid state (toggle className="invalid" in JS) */
+
 .input.invalid,
 .textarea.invalid,
 select.invalid {
@@ -176,9 +162,7 @@ select.invalid {
   animation: shakeX .18s ease;
 }
 
-/* =========================================
-   BUTTONS
-   ========================================= */
+
 .btn {
   appearance: none;
   border: 1px solid var(--border);
@@ -238,7 +222,7 @@ select.invalid {
   background: rgba(239, 68, 68, .08);
 }
 
-/* Legacy button class support */
+
 .task-button {
   border: 1px solid var(--border);
   background: #ffffff;
@@ -256,9 +240,7 @@ select.invalid {
   background: #0f0f0f;
 }
 
-/* =========================================
-   MAINSCREEN — Contact-style date list
-   ========================================= */
+
 .contact-list {
   list-style: none;
   padding: 0;
@@ -309,20 +291,16 @@ select.invalid {
   padding: 8px;
 }
 
-/* =========================================
-   DISPLAYTASKS — Task cards with corner actions & bottom bar
-   ========================================= */
+
 .task-card {
   position: relative;
 
   padding: 12px 14px;
   padding-bottom: 56px;
-  /* space for bottom finish bar */
 }
 
 .task-card .task-main {
   padding-right: 48px;
-  /* room for the icon buttons */
 }
 
 .task-main {
@@ -344,14 +322,14 @@ select.invalid {
   font-size: .95rem;
 }
 
-/* small red "late" line under title */
+
 .task-late {
   color: var(--danger);
   font-size: 0.88rem;
   margin-top: 2px;
 }
 
-/* corner icon buttons */
+
 .icon-btn {
   position: absolute;
   width: 34px;
@@ -386,7 +364,7 @@ select.invalid {
   transform: translateY(1px);
 }
 
-/* positions for edit/delete */
+
 .icon-edit {
   top: 8px;
   right: 8px;
@@ -401,7 +379,7 @@ select.invalid {
   border-color: var(--danger);
 }
 
-/* full-width finish toggle at bottom of card */
+
 .finish-bar {
   position: absolute;
   left: 0;
@@ -425,13 +403,10 @@ select.invalid {
 
 .finish-bar.is-finished {
   background: rgba(22, 163, 74, .14);
-  /* green tint */
+
   border-top-color: rgba(22, 163, 74, .35);
 }
 
-/* =========================================
-   STATUS TEXT (shared)
-   ========================================= */
 .task-name-finish {
   color: var(--ok);
   font-weight: 600;
@@ -441,16 +416,14 @@ select.invalid {
   color: var(--text);
 }
 
-/* Actions row utility */
+
 .actions {
   display: flex;
   gap: 10px;
   margin-top: 4px;
 }
 
-/* =========================================
-   LEGACY DATE/TASK GRID (optional)
-   ========================================= */
+
 .date-list,
 .task-list {
   display: grid;
@@ -477,9 +450,7 @@ select.invalid {
   background: var(--panel-2);
 }
 
-/* =========================================
-   theme toggle
-   ========================================= */
+
 .theme-toggle {
   display: inline-flex;
   align-items: center;
@@ -498,10 +469,6 @@ select.invalid {
 
 
 
-/* =========================================
-   RESPONSIVE (mobile-first → up)
-   Breakpoints: 480, 640, 768, 1024, 1280, 1536
-   ========================================= */
 @media (min-width: 480px) {
 
   .addtask-container,
@@ -525,13 +492,7 @@ select.invalid {
     bottom: 50px;
   }
 
-  /* keep 
-}
 
-@media (min-width: 640px) {
-
-  /* keep contact-list as single column to look like a contact app */
-  /* legacy grids can split into columns if you use them */
   .date-list,
   .task-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -573,7 +534,7 @@ select.invalid {
   }
 }
 
-/* Tiny screens tweaks */
+
 @media (max-width: 420px) {
 
   .icon-edit,

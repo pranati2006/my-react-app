@@ -10,9 +10,9 @@ export default function AddTasks() {
     const isEdit = !!id;
     const existing = isEdit ? Tasks.find((t) => t.id === Number(id)) : null;
 
-    // read ?date=YYYY-MM-DD for create flow
+
     const search = new URLSearchParams(location.search);
-    const presetDate = !isEdit ? (search.get("date") || "") : ""; // ignore if editing
+    const presetDate = !isEdit ? (search.get("date") || "") : "";
 
 
     const [form, setForm] = useState(() =>
@@ -27,10 +27,9 @@ export default function AddTasks() {
 
 
 
-    // track which fields are currently marked invalid (to add red outline)
     const [invalid, setInvalid] = useState({ title: false, assignedDate: false });
 
-    // invalid id → safe redirect
+
     if (isEdit && !existing) return <Navigate to="/" replace />;
 
     const onChange = (e) => {
@@ -38,7 +37,7 @@ export default function AddTasks() {
         setForm((f) => ({ ...f, [name]: value }));
     };
 
-    // clear red outline as soon as user focuses the field
+
     const onFieldFocus = (e) => {
         const { name } = e.target;
         setInvalid((iv) => ({ ...iv, [name]: false }));
@@ -51,14 +50,14 @@ export default function AddTasks() {
         const safeDate = form.assignedDate;
         const safeDesc = (form.description || "").trim();
 
-        // validate and mark invalid fields
+
         const nextInvalid = {
             title: !safeTitle,
             assignedDate: !safeDate,
         };
         setInvalid(nextInvalid);
 
-        // if any invalid, stop here (red outline stays until focus)
+
         if (nextInvalid.title || nextInvalid.assignedDate) return;
 
         if (isEdit) {
