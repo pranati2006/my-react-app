@@ -1,47 +1,79 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Tasks } from "./dataset";
 
-function AddTasks() {
+export default function AddTasks() {
     const navigate = useNavigate();
-    const [title, setTitle] = useState("");
-    const [assignedDate, setAssignedDate] = useState("");
-    const [finishTime, setFinishTime] = useState("");
+    const { id } = useParams();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        Tasks.push({
-            id: Tasks.length + 1,
-            title: title.trim(),
-            assignedDate,      // "YYYY-MM-DD"
-            finishTime,        // "HH:mm"
-            finish: false,
-        });
+    const isEdit = !!id;
+    const existing = isEdit ? Tasks.find(t => t.id === Number(id)) : null;
 
+    const [form, setForm] = useState(() => {
+        if (existing) {
+            return {
+                title: existing.title,
+                assignedDate: existing.assignedDate,
+                finishTime: existing.finishTime,
+            };
+        }
+        return { title: "", assignedDate: "", finishTime: "" };
+    });
 
-        alert("New Task:" + JSON.stringify(Tasks[Tasks.length - 1]));
-
-
-        setTitle("");
-        setAssignedDate("");
-        setFinishTime("");
-    };
-    const goback = () => {
+    if (isEdit && !existing) {
+        // invalid id → bounce home (or show an error)
         navigate(`/`);
     }
 
-    return (
+    const onChange = (e) => {
+        const { name, value } = e.target;
+        setForm(f => ({ ...f, [name]: value }));
+    };
 
+    const onSubmit = (e) => {
+        e.preventDefault();
+        const { title, assignedDate, finishTime } = form;
+        if (!title || !assignedDate || !finishTime) return;
+
+        if (isEdit) {
+            // update existing task in-place (keep finish flag)
+            const i = Tasks.findIndex(t => t.id === Number(id));
+            if (i !== -1) {
+                Tasks[i] = {
+                    ...Tasks[i],
+                    title: title.trim(),
+                    assignedDate,
+                    finishTime,
+                };
+            }
+            navigate(`/displaytask/${assignedDate}`);
+            return;
+        }
+
+        // create new task
+        const nextId = Tasks.length ? Math.max(...Tasks.map(t => t.id)) + 1 : 1;
+        Tasks.push({
+            id: nextId,
+            title: title.trim(),
+            assignedDate,
+            finishTime,
+            finish: false,
+        });
+
+        // after add, go to that date’s list
+        navigate(`/displaytask/${assignedDate}`);
+    };
+
+    return (
         <div className="container">
-            <button onClick={goback}>back</button>
-            <h2>Add Task</h2>
-            <form onSubmit={handleSubmit}>
+            <h2>{isEdit ? "Modify Task" : "Add Task"}</h2>
+            <form onSubmit={onSubmit}>
                 <div>
                     <label>Title: </label>
                     <input
-                        type="text"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
+                        name="title"
+                        value={form.title}
+                        onChange={onChange}
                         required
                     />
                 </div>
@@ -50,8 +82,9 @@ function AddTasks() {
                     <label>Assigned Date: </label>
                     <input
                         type="date"
-                        value={assignedDate}
-                        onChange={(e) => setAssignedDate(e.target.value)}
+                        name="assignedDate"
+                        value={form.assignedDate}
+                        onChange={onChange}
                         required
                     />
                 </div>
@@ -60,16 +93,21 @@ function AddTasks() {
                     <label>Finish Time: </label>
                     <input
                         type="time"
-                        value={finishTime}
-                        onChange={(e) => setFinishTime(e.target.value)}
+                        name="finishTime"
+                        value={form.finishTime}
+                        onChange={onChange}
                         required
                     />
                 </div>
 
-                <button type="submit">Add</button>
+                <div>
+                    <button type="submit">{isEdit ? "Save changes" : "Add"}</button>
+                    <button type="button" onClick={() => navigate(-1)} style={{ marginLeft: 8 }}>
+                        Cancel
+                    </button>
+                </div>
             </form>
         </div>
     );
-}
 
-export default AddTasks;
+}

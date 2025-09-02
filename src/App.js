@@ -10,6 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainScreen />} />
         <Route path="/addtask" element={<AddTasks />} />
+        <Route path="/addtask/:id" element={<AddTasks />} />
         <Route path="/displaytask/:date" element={<DisplayTasks />} />
         <Route path="*" element={<div style={{ padding: 16 }}>Not found</div>} />
       </Routes>

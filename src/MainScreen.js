@@ -11,7 +11,7 @@ function MainScreen() {
     const [uniqueDates, setUniqueDates] = useState([]);
 
     useEffect(() => {
-        setUniqueDates([...new Set(Tasks.map(t => t.assignedDate))]);
+        setUniqueDates([...new Set(Tasks.map(t => t.assignedDate))].sort((a, b) => b.localeCompare(a)));
     }, []);
 
     const handleDateClick = (date) => {

@@ -61,6 +61,9 @@ export default function DisplayTasks() {
                             >
                                 {task.title} — {task.finishTime} — {task.finish ? "Finished" : "Not finished"}
                             </div>
+                            <button className="task-button" onClick={() => navigate(`/addtask/${task.id}`)}>
+                                modify
+                            </button>
                             <button className="task-button" onClick={() => handleDelete(task.id)}>
                                 delete
                             </button>
