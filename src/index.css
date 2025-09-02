@@ -1,0 +1,410 @@
+/* =========================================
+   THEME
+   - Default: Light (white)
+   - Optional dark: add class "theme-dark" to <body> or a top wrapper
+   Secondary/accent color = blue
+   ========================================= */
+:root {
+  --bg: #ffffff;
+  --panel: #f7f7f8;
+  --panel-2: #f1f3f5;
+  --text: #111111;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+
+  --accent: #2563eb;
+  /* blue */
+  --accent-contrast: #ffffff;
+
+  --ok: #16a34a;
+  /* green */
+  --danger: #ef4444;
+  /* red */
+
+  --radius: 12px;
+  --shadow: 0 6px 18px rgba(0, 0, 0, .06);
+  --gap: 12px;
+  --gap-lg: 20px;
+
+  --font: system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, sans-serif;
+}
+
+.theme-dark {
+  --bg: #0b0b0b;
+  --panel: #151515;
+  --panel-2: #1a1a1a;
+  --text: #f5f5f5;
+  --muted: #a3a3a3;
+  --border: #232323;
+
+  --accent: #3b82f6;
+  --accent-contrast: #ffffff;
+
+  --ok: #22c55e;
+  --danger: #ef4444;
+
+  --shadow: 0 8px 24px rgba(0, 0, 0, .35);
+}
+
+/* =========================================
+   BASE
+   ========================================= */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Shared containers */
+.addtask-container,
+.mainscreen-container,
+.tasks-container {
+  width: 100%;
+  max-width: 980px;
+  margin: 20px auto;
+  padding: 16px;
+}
+
+/* AddTask panel box */
+.addtask-container {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+.page-title {
+  margin: 8px 0 16px;
+  font-size: 1.35rem;
+}
+
+/* Toolbar above lists */
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+/* =========================================
+   FORMS (AddTasks)
+   ========================================= */
+.form {
+  display: grid;
+  gap: var(--gap-lg);
+}
+
+.form-row {
+  display: grid;
+  gap: 8px;
+}
+
+.label {
+  color: var(--muted);
+  font-size: .95rem;
+}
+
+.input,
+.textarea,
+select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  outline: none;
+  background: var(--panel-2);
+  color: var(--text);
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.input:focus,
+.textarea:focus,
+select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .20);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* invalid state (toggle className="invalid") */
+.input.invalid,
+.textarea.invalid,
+select.invalid {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, .25);
+}
+
+@keyframes shakeX {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-4px);
+  }
+
+  40% {
+    transform: translateX(4px);
+  }
+
+  60% {
+    transform: translateX(-3px);
+  }
+
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+.form .input.invalid {
+  animation: shakeX .18s ease;
+}
+
+/* =========================================
+   BUTTONS
+   ========================================= */
+.btn {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform .03s ease, background .15s ease, border-color .15s ease, filter .15s ease;
+}
+
+.theme-dark .btn {
+  background: #0f0f0f;
+}
+
+.btn:hover {
+  filter: brightness(0.98);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn[disabled] {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.05);
+}
+
+.btn-secondary {
+  background: transparent;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-secondary:hover {
+  background: rgba(37, 99, 235, .06);
+}
+
+.btn-danger-outline {
+  background: transparent;
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.btn-danger-outline:hover {
+  background: rgba(239, 68, 68, .08);
+}
+
+/* For older code using .task-button */
+.task-button {
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.task-button:hover {
+  filter: brightness(0.98);
+}
+
+.theme-dark .task-button {
+  background: #0f0f0f;
+}
+
+/* =========================================
+   LISTS
+   ========================================= */
+/* "Contact list" style for dates on MainScreen */
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--gap);
+}
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 10px;
+}
+
+.contact-main {
+  appearance: none;
+  border: none;
+  background: transparent;
+  text-align: left;
+  flex: 1;
+  padding: 8px 6px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.contact-main:hover {
+  background: var(--panel-2);
+}
+
+.contact-title {
+  display: block;
+  font-weight: 600;
+}
+
+.contact-sub {
+  display: block;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+.empty {
+  color: var(--muted);
+  padding: 8px;
+}
+
+/* Tasks & dates (legacy classes used by DisplayTasks) */
+.date-list,
+.task-list {
+  display: grid;
+  gap: var(--gap);
+}
+
+.date-item,
+.task-item {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.date-item {
+  cursor: pointer;
+}
+
+.date-item:hover {
+  background: var(--panel-2);
+}
+
+.task-name-finish {
+  color: var(--ok);
+  font-weight: 600;
+}
+
+.task-name-notfinish {
+  color: var(--text);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* =========================================
+   RESPONSIVE (mobile-first → up)
+   Breakpoints: 480, 640, 768, 1024, 1280, 1536
+   ========================================= */
+@media (min-width: 480px) {
+
+  .addtask-container,
+  .mainscreen-container,
+  .tasks-container {
+    padding: 18px;
+  }
+}
+
+@media (min-width: 640px) {
+
+  .date-list,
+  .task-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .addtask-container {
+    padding: 24px;
+  }
+
+  .date-list,
+  .task-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+
+  .date-list,
+  .task-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+
+  .date-list,
+  .task-list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1536px) {
+
+  .date-list,
+  .task-list {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
