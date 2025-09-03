@@ -11,10 +11,8 @@ export default function AddTasks() {
     const isEdit = !!id;
     const existing = isEdit ? Tasks.find((t) => t.id === Number(id)) : null;
 
-
     const search = new URLSearchParams(location.search);
     const presetDate = !isEdit ? (search.get("date") || "") : "";
-
 
     const [form, setForm] = useState(() =>
         existing
@@ -22,14 +20,13 @@ export default function AddTasks() {
                 title: existing.title,
                 assignedDate: existing.assignedDate,
                 description: existing.description ?? "",
+                subtasks: Array.isArray(existing.subtasks) ? existing.subtasks : [],
             }
-            : { title: "", assignedDate: presetDate, description: "" }
+            : { title: "", assignedDate: presetDate, description: "", subtasks: [] }
     );
 
-
-
     const [invalid, setInvalid] = useState({ title: false, assignedDate: false });
-
+    const [subName, setSubName] = useState("");
 
     if (isEdit && !existing) return <Navigate to="/" replace />;
 
@@ -38,10 +35,31 @@ export default function AddTasks() {
         setForm((f) => ({ ...f, [name]: value }));
     };
 
-
     const onFieldFocus = (e) => {
         const { name } = e.target;
         setInvalid((iv) => ({ ...iv, [name]: false }));
+    };
+
+    const addSubtask = () => {
+        const name = subName.trim();
+        if (!name) return;
+        setForm((f) => ({ ...f, subtasks: [...f.subtasks, { name, finish: false }] }));
+        setSubName("");
+    };
+
+    const removeSubtask = (idx) => {
+        setForm((f) => {
+            const next = f.subtasks.slice();
+            next.splice(idx, 1);
+            return { ...f, subtasks: next };
+        });
+    };
+
+    const onSubKeyDown = (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            addSubtask();
+        }
     };
 
     const onSubmit = (e) => {
@@ -49,16 +67,10 @@ export default function AddTasks() {
 
         const safeTitle = (form.title || "").trim();
         const safeDate = form.assignedDate;
-        const safeDesc = (form.description || "").trim();
+        const safeDesc = (form.description || "").replace(/\r\n/g, "\n").trim();
 
-
-        const nextInvalid = {
-            title: !safeTitle,
-            assignedDate: !safeDate,
-        };
+        const nextInvalid = { title: !safeTitle, assignedDate: !safeDate };
         setInvalid(nextInvalid);
-
-
         if (nextInvalid.title || nextInvalid.assignedDate) return;
 
         if (isEdit) {
@@ -69,6 +81,8 @@ export default function AddTasks() {
                     title: safeTitle,
                     assignedDate: safeDate,
                     description: safeDesc,
+                    subtasks: form.subtasks,
+                    finish: existing.finish ?? false,
                 };
             }
             saveTasks(Tasks);
@@ -82,16 +96,15 @@ export default function AddTasks() {
             title: safeTitle,
             assignedDate: safeDate,
             description: safeDesc,
-            finish: false,
+            subtasks: form.subtasks,
+            finish: false, // start unchecked; DisplayTask will manage finish state
         });
         saveTasks(Tasks);
-
         navigate(`/displaytask/${safeDate}`);
     };
 
     return (
         <div className="addtask-container">
-
             <h2 className="page-title">{isEdit ? "Modify Task" : "Add Task"}</h2>
 
             <form onSubmit={onSubmit} className="form" noValidate>
@@ -105,8 +118,7 @@ export default function AddTasks() {
                         onChange={onChange}
                         onFocus={onFieldFocus}
                         required
-                        aria-invalid={invalid.title ? "true" : "false"}
-                        placeholder="Task title…"
+                        placeholder="e.g. Write report"
                     />
                 </div>
 
@@ -121,7 +133,6 @@ export default function AddTasks() {
                         onChange={onChange}
                         onFocus={onFieldFocus}
                         required
-                        aria-invalid={invalid.assignedDate ? "true" : "false"}
                     />
                 </div>
 
@@ -129,13 +140,47 @@ export default function AddTasks() {
                     <label className="label" htmlFor="description">Description</label>
                     <textarea
                         id="description"
-                        className="textarea"
+                        className="textarea task-desc"
                         name="description"
                         value={form.description}
                         onChange={onChange}
                         rows={3}
                         placeholder="Optional notes…"
                     />
+                </div>
+
+                <div className="form-row">
+                    <label className="label">Subtasks</label>
+                    <div className="subtask-inputs">
+                        <input
+                            className="input"
+                            placeholder="Subtask name"
+                            value={subName}
+                            onChange={(e) => setSubName(e.target.value)}
+                            onKeyDown={onSubKeyDown}
+                        />
+                        <button type="button" className="btn" onClick={addSubtask}>
+                            Add
+                        </button>
+                    </div>
+
+                    {form.subtasks.length > 0 && (
+                        <ul className="subtask-list">
+                            {form.subtasks.map((s, idx) => (
+                                <li key={idx} className="subtask-item">
+                                    <span className="bullet-preview" >•</span>
+                                    <span className="subtask-text">{s.name}</span>
+                                    <button
+                                        type="button"
+                                        className="btn btn-danger-outline btn-xxs"
+                                        onClick={() => removeSubtask(idx)}
+                                    >
+                                        ×
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
 
                 <div className="actions">
