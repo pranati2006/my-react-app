@@ -11,7 +11,7 @@ export default function DisplayTasks() {
     const [filter, setFilter] = useState("all");
     const [, force] = useState(0);
 
-    // NEW: track which tasks are expanded (to show subtasks)
+
     const [openIds, setOpenIds] = useState(() => new Set());
     const isOpen = (id) => openIds.has(id);
     const toggleOpen = (id) => {

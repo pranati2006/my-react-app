@@ -5,7 +5,6 @@ import { loadTasks, saveTasks } from "./dataset";
 import ThemeToggle from "./ThemeToggle";
 
 function todayYMD() {
-    // Stable YYYY-MM-DD, unaffected by timezone offsets
     const now = new Date();
     const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
     return local.toISOString().slice(0, 10);
@@ -70,7 +69,6 @@ export default function MainScreen() {
                     +
                 </button>
 
-                {/* Filter control */}
                 <select
                     aria-label="Filter dates"
                     value={filter}

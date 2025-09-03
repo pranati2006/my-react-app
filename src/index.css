@@ -488,7 +488,7 @@ select.invalid {
   white-space: pre-line;
 }
 
-/* show \n */
+
 
 .subtask-inputs {
   display: flex;
@@ -531,18 +531,6 @@ select.invalid {
   text-decoration: line-through;
   color: #6c757d;
 }
-
-.caret {
-  display: inline-block;
-  transition: transform .15s ease;
-  margin-right: .25rem;
-}
-
-.caret.open {
-  transform: rotate(180deg);
-}
-
-
 
 
 @media (min-width: 480px) {

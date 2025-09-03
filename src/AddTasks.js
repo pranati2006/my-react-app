@@ -97,7 +97,7 @@ export default function AddTasks() {
             assignedDate: safeDate,
             description: safeDesc,
             subtasks: form.subtasks,
-            finish: false, // start unchecked; DisplayTask will manage finish state
+            finish: false,
         });
         saveTasks(Tasks);
         navigate(`/displaytask/${safeDate}`);
