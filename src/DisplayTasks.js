@@ -105,6 +105,7 @@ export default function DisplayTasks() {
                 {visible.length ? (
                     visible.map((task) => {
                         const hasSubs = Array.isArray(task.subtasks) && task.subtasks.length > 0;
+                        const subtaskcount = hasSubs ? task.subtasks.length : 0;
                         const open = isOpen(task.id);
 
                         return (
@@ -119,6 +120,7 @@ export default function DisplayTasks() {
                                             {task.title}
                                         </span>
                                     </div>
+                                    {hasSubs && (<div className="subtask-count"  >{subtaskcount} subtask{subtaskcount > 1 ? "s" : ""}</div>)}
                                     {task.description && (
                                         <div className="task-desc">{task.description}</div>
                                     )}
