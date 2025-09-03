@@ -527,6 +527,11 @@ select.invalid {
   background: #198754;
 }
 
+.subtask-text {
+  font-size: small;
+  color: #57595b;
+}
+
 .subtask-text.line-through {
   text-decoration: line-through;
   color: #6c757d;
