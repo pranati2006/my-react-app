@@ -111,6 +111,7 @@ export default function MainScreen() {
                                     <span className="contact-sub">
                                         {count} task{count !== 1 ? "s" : ""}
                                         {isDone ? " • All done" : ""}
+                                        {isPast ? ` • ${unfinishedCount} task${count !== 1 ? "s" : ""} past due date` : ""}
                                     </span>
                                 </button>
 

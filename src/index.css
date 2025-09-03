@@ -334,6 +334,7 @@ select.invalid {
 .task-desc {
   color: var(--muted);
   font-size: .95rem;
+  white-space: pre-line;
 }
 
 
