@@ -271,8 +271,22 @@ select.invalid {
   cursor: pointer;
 }
 
+.contact-row.is-past .contact-main {
+  outline: 1px solid #dc3545;
+  outline-offset: 2px;
+}
+
+.contact-row.is-done .contact-main {
+  outline: 1px solid #2fa439;
+  outline-offset: 2px;
+}
+
 .contact-main:hover {
   background: var(--panel-2);
+}
+
+.contact-row.is-past .contact-title {
+  color: #dc3545;
 }
 
 .contact-title {
