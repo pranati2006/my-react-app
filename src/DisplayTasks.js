@@ -112,9 +112,9 @@ export default function DisplayTasks() {
 
                                 <div
                                     className="task-main"
-                                    onClick={() => { if (hasSubs) toggleOpen(task.id); }}
+
                                 >
-                                    <div className="task-title-line">
+                                    <div className="task-title-line" onClick={() => { if (hasSubs) toggleOpen(task.id); }}>
                                         <span className={task.finish ? "task-name-finish" : "task-name-notfinish"}>
                                             {task.title}
                                         </span>

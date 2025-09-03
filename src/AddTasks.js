@@ -171,6 +171,7 @@ export default function AddTasks() {
                                     <span className="bullet-preview" >•</span>
                                     <span className="subtask-text">{s.name}</span>
                                     <button
+                                        style={{ marginLeft: "auto" }}
                                         type="button"
                                         className="btn btn-danger-outline btn-xxs"
                                         onClick={() => removeSubtask(idx)}
